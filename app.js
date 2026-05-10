@@ -3,7 +3,7 @@ const STORAGE_KEY = "lista-multicolor-escrutinio-v2";
 
 const provincialOptions = [
   "Lista Celeste/Violeta",
-  "Lista Multicolor - Verde/Granate/Rosa/Marron/Fucsia/Lilaroja/Gris",
+  "Lista Multicolor",
   "Voto en blanco",
   "Voto impugnados",
   "Voto nulo",
@@ -22,7 +22,7 @@ const seccionalOptions = [
 const shortLabels = {
   "Total padron": "Padron",
   "Lista Celeste/Violeta": "Celeste-Violeta",
-  "Lista Multicolor - Verde/Granate/Rosa/Marron/Fucsia/Lilaroja/Gris": "P Multicolor",
+  "Lista Multicolor": "P Multicolor",
   "Lista Celeste/Violeta/Dorada": "celeste-viol-dor",
   'Lista Naranja-Marron-Roja-Rosa-Negra-Fucsia "Multicolor"': "S Multicolor",
   "Voto en blanco": "Blanco",
