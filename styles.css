@@ -179,7 +179,7 @@ h3 {
   align-items: start;
   display: grid;
   gap: 18px;
-  grid-template-columns: minmax(0, 1fr) 390px;
+  grid-template-columns: minmax(0, 1fr) minmax(500px, 34vw);
 }
 
 .summary {
@@ -437,7 +437,7 @@ h3 {
   border-radius: 7px;
   display: grid;
   gap: 12px;
-  grid-template-columns: minmax(0, 1fr) 90px;
+  grid-template-columns: minmax(0, 1fr) 104px;
   padding: 9px 0;
 }
 
@@ -462,8 +462,8 @@ h3 {
 .pie-chart {
   align-items: center;
   display: grid;
-  gap: 14px;
-  grid-template-columns: 142px minmax(0, 1fr);
+  gap: 18px;
+  grid-template-columns: 158px minmax(0, 1fr);
 }
 
 .pie {
@@ -505,14 +505,14 @@ h3 {
   border-radius: 7px;
   display: grid;
   gap: 8px;
-  grid-template-columns: 12px minmax(0, 1fr) auto;
+  grid-template-columns: 12px minmax(0, 1fr) 92px;
   padding: 4px 0;
 }
 
 .legend-row.is-leading {
   background: rgba(53, 208, 127, 0.14);
   border: 1px solid rgba(53, 208, 127, 0.38);
-  grid-template-columns: 12px minmax(0, 1fr) auto;
+  grid-template-columns: 12px minmax(0, 1fr) 92px;
   padding: 7px;
 }
 
@@ -530,14 +530,14 @@ h3 {
   color: var(--muted);
   font-size: 12px;
   font-weight: 700;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 1.2;
+  white-space: normal;
 }
 
 .legend-row strong {
   color: #ffffff;
   font-size: 12px;
+  text-align: right;
 }
 
 .swatch {
