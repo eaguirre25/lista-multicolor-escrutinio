@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Cache-Control" content="no-store">
+    <title>Escrutinio Lista Multicolor</title>
+    <link rel="stylesheet" href="styles.css?v=6">
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="title-block">
+        <p class="eyebrow">Eleccion del sindicato</p>
+        <h1>Lista Multicolor - escrutinio provisorio</h1>
+        <div class="status-line">
+          <span>30 mesas</span>
+          <span>Carga manual</span>
+          <span>Resultados en vivo</span>
+        </div>
+      </div>
+      <div class="actions">
+        <button id="saveButton" type="button">Guardar</button>
+        <button id="exportCsvButton" type="button" class="secondary">CSV</button>
+        <button id="clearButton" type="button" class="danger">Vaciar</button>
+      </div>
+    </header>
+
+    <main class="page">
+      <section class="summary" aria-label="Resumen general">
+        <div>
+          <span>Total padron</span>
+          <strong id="summaryPadron">0</strong>
+        </div>
+        <div>
+          <span>Mesas cargadas</span>
+          <strong id="summaryLoaded">0/30</strong>
+        </div>
+        <div>
+          <span>Votos provincial</span>
+          <strong id="summaryProvincial">0</strong>
+        </div>
+        <div>
+          <span>Votos seccional</span>
+          <strong id="summarySeccional">0</strong>
+        </div>
+      </section>
+
+      <div class="workbench">
+        <section class="sheet-block">
+          <div class="section-title">
+            <div>
+              <p class="section-kicker">Actas de mesa</p>
+              <h2>Carga manual por mesa</h2>
+            </div>
+            <span>Padron + provincial + seccional</span>
+          </div>
+          <div class="table-scroll">
+            <div id="loadStatus" class="load-status">Cargando la lista de 30 mesas...</div>
+            <table id="scrutinyTable" class="data-table"></table>
+          </div>
+        </section>
+
+        <aside class="results" aria-label="Totales y graficos">
+          <div class="section-title">
+            <div>
+              <p class="section-kicker">Centro de computos</p>
+              <h2>Resultados en vivo</h2>
+            </div>
+            <span id="lastSaved">Sin cambios guardados</span>
+          </div>
+
+          <article class="result-panel">
+            <h3>Provincial</h3>
+            <div id="provincialTotalsList" class="totals-list"></div>
+            <div id="provincialChart" class="pie-chart" aria-label="Distribucion provincial"></div>
+          </article>
+
+          <article class="result-panel">
+            <h3>Seccional</h3>
+            <div id="seccionalTotalsList" class="totals-list"></div>
+            <div id="seccionalChart" class="pie-chart" aria-label="Distribucion seccional"></div>
+          </article>
+        </aside>
+      </div>
+    </main>
+
+    <script src="app.js?v=6"></script>
+  </body>
+</html>
