@@ -22,7 +22,7 @@ const seccionalOptions = [
 const shortLabels = {
   "Total padron": "Padron",
   "Lista Celeste/Violeta": "Celeste-Violeta",
-  "Lista Multicolor": "P Multicolor",
+  "Lista Multicolor": "Multicolor",
   "Lista Celeste/Violeta/Dorada": "celeste-viol-dor",
   'Lista Naranja-Marron-Roja-Rosa-Negra-Fucsia "Multicolor"': "S Multicolor",
   "Voto en blanco": "Blanco",
