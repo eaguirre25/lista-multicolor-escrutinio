@@ -339,9 +339,9 @@ function renderTableFooter(level, totals) {
 
 function renderTotalsList(container, totals) {
   container.innerHTML = "";
-  Object.entries(totals).forEach(([label, value]) => {
+  getRankedEntries(totals).forEach(([label, value], index) => {
     const row = document.createElement("div");
-    row.className = "total-row";
+    row.className = `total-row${index === 0 && value > 0 ? " is-leading" : ""}`;
     row.innerHTML = `<span>${escapeHtml(label)}</span><strong>${formatNumber(value)}</strong>`;
     container.append(row);
   });
@@ -350,10 +350,11 @@ function renderTotalsList(container, totals) {
 function renderChart(container, totals) {
   const totalVotes = sumValues(totals);
   container.innerHTML = "";
+  const rankedEntries = getRankedEntries(totals);
   const slices = [];
   let start = 0;
 
-  Object.entries(totals).forEach(([label, value], index) => {
+  rankedEntries.forEach(([, value], index) => {
     const percent = totalVotes > 0 ? (value / totalVotes) * 100 : 0;
     const end = start + percent;
     const color = chartColors[index % chartColors.length];
@@ -373,10 +374,10 @@ function renderChart(container, totals) {
   const legend = document.createElement("div");
   legend.className = "pie-legend";
 
-  Object.entries(totals).forEach(([label, value], index) => {
+  rankedEntries.forEach(([label, value], index) => {
     const percent = totalVotes > 0 ? (value / totalVotes) * 100 : 0;
     const row = document.createElement("div");
-    row.className = "legend-row";
+    row.className = `legend-row${index === 0 && value > 0 ? " is-leading" : ""}`;
     row.innerHTML = `
       <span class="swatch" style="background:${chartColors[index % chartColors.length]}"></span>
       <span class="legend-label">${escapeHtml(label)}</span>
@@ -386,6 +387,13 @@ function renderChart(container, totals) {
   });
 
   container.append(pie, legend);
+}
+
+function getRankedEntries(totals) {
+  return Object.entries(totals)
+    .map(([label, value], index) => ({ label, value: toNumber(value), index }))
+    .sort((a, b) => (b.value - a.value) || (a.index - b.index))
+    .map(({ label, value }) => [label, value]);
 }
 
 function getAccumulatedTotals() {

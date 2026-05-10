@@ -434,10 +434,24 @@ h3 {
 .total-row {
   align-items: center;
   border-bottom: 1px solid var(--line);
+  border-radius: 7px;
   display: grid;
   gap: 12px;
   grid-template-columns: minmax(0, 1fr) 90px;
   padding: 9px 0;
+}
+
+.total-row.is-leading {
+  background: linear-gradient(90deg, rgba(53, 208, 127, 0.22), rgba(244, 63, 143, 0.12));
+  border: 1px solid rgba(53, 208, 127, 0.48);
+  box-shadow: 0 0 24px rgba(53, 208, 127, 0.12);
+  padding: 10px 9px;
+}
+
+.total-row.is-leading span::before {
+  color: var(--green);
+  content: "1° ";
+  font-weight: 900;
 }
 
 .total-row strong {
@@ -488,9 +502,28 @@ h3 {
 
 .legend-row {
   align-items: center;
+  border-radius: 7px;
   display: grid;
   gap: 8px;
   grid-template-columns: 12px minmax(0, 1fr) auto;
+  padding: 4px 0;
+}
+
+.legend-row.is-leading {
+  background: rgba(53, 208, 127, 0.14);
+  border: 1px solid rgba(53, 208, 127, 0.38);
+  grid-template-columns: 12px minmax(0, 1fr) auto;
+  padding: 7px;
+}
+
+.legend-row.is-leading .legend-label {
+  color: #ffffff;
+}
+
+.legend-row.is-leading .legend-label::before {
+  color: var(--green);
+  content: "GANANDO · ";
+  font-weight: 900;
 }
 
 .legend-label {
