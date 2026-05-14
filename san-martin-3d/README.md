@@ -1,54 +1,61 @@
 # General San Martín 3D
 
-Visualización estática en 3D del Partido de General San Martín usando MapLibre GL JS.
+Visualización web estática del Partido de General San Martín, Provincia de Buenos Aires, en una vista oblicua 3D con MapLibre GL JS y una base raster de OpenStreetMap.
 
-## ¿Qué es esta prueba?
-Es una maqueta funcional de un mapa 3D centrado en el Partido de General San Martín, Buenos Aires. Está diseñado con tecnologías web estándar (HTML, CSS, JS) sin dependencias de Node.js ni build steps, lo que permite un renderizado estable y rápido directamente en GitHub Pages.
+## Cómo verla en GitHub Pages
 
-## ¿Cómo verla localmente?
-1. Cloná o descargá el repositorio.
-2. Abrí una terminal en la carpeta raíz del proyecto.
-3. Iniciá un servidor local estático. Por ejemplo, si tenés Python:
-   ```bash
-   python -m http.server 8000
-   ```
-4. Navegá a `http://localhost:8000/san-martin-3d/index.html`.
+La URL pública esperada es:
 
-*Nota: No se recomienda abrir el archivo index.html directamente con doble clic (protocolo `file://`) debido a las restricciones de seguridad CORS del navegador al cargar los archivos GeoJSON locales.*
+https://eaguirre25.github.io/lista-multicolor-escrutinio/san-martin-3d/
 
-## ¿Cómo verla publicada en GitHub Pages?
-Si este proyecto está subido a la rama principal de GitHub y Pages está activado desde los ajustes del repositorio, se podrá acceder en:
-`https://eaguirre25.github.io/lista-multicolor-escrutinio/san-martin-3d/`
+La página no requiere tokens, claves de API ni procesos de compilación.
 
-## Archivos que utiliza
-- `index.html`: Estructura base de la página.
-- `styles.css`: Estilos visuales del mapa y el panel de control.
-- `app.js`: Lógica de inicialización de MapLibre, configuración de capas 3D y eventos de botones.
-- `data/san_martin_boundary.geojson`: Límite administrativo.
-- `data/buildings.geojson`: Volúmenes urbanos 3D.
+## Cómo abrirla localmente
 
-## Datos Provisorios
-Para garantizar la estabilidad y el correcto funcionamiento en GitHub Pages sin depender de APIs externas inestables, los datos en la carpeta `data/` son actualmente **geometrías provisorias (mock data)** generadas proceduralmente dentro de un bounding box aproximado de General San Martín. 
+Se puede abrir directamente desde `san-martin-3d/index.html`. Si el navegador bloquea la lectura de GeoJSON por usar `file://`, la aplicación usa datos embebidos y volúmenes generados en memoria para evitar una pantalla en blanco.
 
-## ¿Cómo reemplazar por datos reales en el futuro?
+Para probarla en condiciones similares a GitHub Pages, conviene servir el repositorio con un servidor estático:
 
-### 1. Reemplazar el límite aproximado por uno oficial
-- Descargá el límite oficial de General San Martín en formato GeoJSON (desde IGN, OpenStreetMap, o Datos Abiertos).
-- Reemplazá el archivo existente en `data/san_martin_boundary.geojson` con el nuevo archivo.
+```bash
+python -m http.server 8000
+```
 
-### 2. Reemplazar edificios simulados por reales (OSM)
-- Usá una herramienta como [Overpass Turbo](https://overpass-turbo.eu/) para extraer los edificios de la zona de San Martín usando esta consulta:
-  ```overpass
-  [out:json][timeout:50];
-  area["name"="General San Martín"]["admin_level"="8"]->.a;
-  (
-    way["building"](area.a);
-    relation["building"](area.a);
-  );
-  out body;
-  >;
-  out skel qt;
-  ```
-- Exportá el resultado como GeoJSON.
-- Renombrá el archivo a `buildings.geojson` y reemplazá el archivo actual en la carpeta `data/`.
-- Asegurate de que los features tengan la propiedad `height` o `building:levels`. Si el script `app.js` necesita ajustes para leer la altura, podés modificar la expresión `['get', 'height']` en la capa `urban-volume`.
+Luego abrir:
+
+http://localhost:8000/san-martin-3d/
+
+## Archivos
+
+- `index.html`: estructura mínima de la página y carga de MapLibre desde CDN.
+- `styles.css`: estilos de pantalla completa, panel superior izquierdo, botones e indicador de estado.
+- `app.js`: inicialización del mapa, carga de capas, controles de vista y fallbacks.
+- `data/san_martin_boundary.geojson`: límite provisorio aproximado del partido.
+- `data/buildings.geojson`: volúmenes urbanos simulados con propiedad `height`.
+
+## Datos provisorios
+
+El límite territorial incluido es aproximado y no debe usarse como dato oficial. Sirve solo para esta primera prueba visual.
+
+Los volúmenes urbanos son simulados. No representan catastro real, alturas reales, huellas edilicias oficiales ni edificios de OpenStreetMap. Fueron distribuidos dentro del polígono aproximado para comprobar la vista 3D.
+
+## Reemplazar el límite por un GeoJSON oficial
+
+1. Descargar un límite oficial o validado del Partido de General San Martín desde una fuente confiable, por ejemplo IGN, datos abiertos provinciales/municipales u OpenStreetMap revisado.
+2. Convertirlo a GeoJSON en EPSG:4326, con coordenadas `[longitud, latitud]`.
+3. Reemplazar `data/san_martin_boundary.geojson`.
+4. Mantener una `FeatureCollection` con geometría `Polygon` o `MultiPolygon`.
+
+La aplicación también contiene un polígono embebido como respaldo por si ese archivo no carga.
+
+## Reemplazar los volúmenes simulados por edificios reales de OSM
+
+1. Obtener edificios de OpenStreetMap para General San Martín con una herramienta externa como Overpass Turbo.
+2. Exportar el resultado como GeoJSON.
+3. Normalizar cada feature para que tenga una propiedad numérica `height`.
+4. Reemplazar `data/buildings.geojson`.
+
+Si no hay altura real disponible, una opción razonable para una segunda etapa es estimar `height` desde `building:levels`, por ejemplo `levels * 3`.
+
+## Segunda versión
+
+Una próxima versión debería incorporar límite oficial validado, edificios reales de OSM o catastro municipal, cálculo robusto de alturas, recorte exacto de edificios al límite del partido y controles para activar/desactivar capas analíticas futuras.

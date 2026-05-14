@@ -1,1 +1,63 @@
-{"type": "FeatureCollection", "features": [{"type": "Feature", "properties": {}, "geometry": {"type": "Polygon", "coordinates": [[[-58.6, -34.61], [-58.52, -34.61], [-58.52, -34.54], [-58.6, -34.54], [-58.6, -34.61]]]}}]}
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "General San Martin",
+        "source": "aproximado provisorio"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -58.5965,
+              -34.5412
+            ],
+            [
+              -58.5742,
+              -34.5358
+            ],
+            [
+              -58.5488,
+              -34.5404
+            ],
+            [
+              -58.5238,
+              -34.5544
+            ],
+            [
+              -58.5164,
+              -34.5786
+            ],
+            [
+              -58.5268,
+              -34.6037
+            ],
+            [
+              -58.5525,
+              -34.6122
+            ],
+            [
+              -58.5798,
+              -34.6049
+            ],
+            [
+              -58.5992,
+              -34.5834
+            ],
+            [
+              -58.6035,
+              -34.5578
+            ],
+            [
+              -58.5965,
+              -34.5412
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}
