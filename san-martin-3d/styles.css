@@ -13,14 +13,22 @@ body,
 
 body {
   overflow: hidden;
-  background: #101720;
-  color: #edf7ff;
+  background:
+    radial-gradient(circle at 52% 0%, rgba(190, 220, 255, 0.22), transparent 30%),
+    linear-gradient(180deg, #d8e6f5 0%, #eef3f7 42%, #c8ced3 100%);
+  color: #111827;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 #map {
   position: fixed;
   inset: 0;
+}
+
+#map canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .panel {
@@ -30,24 +38,25 @@ body {
   z-index: 2;
   width: min(330px, calc(100vw - 36px));
   padding: 16px;
-  border: 1px solid rgba(190, 227, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 8px;
-  background: rgba(11, 18, 27, 0.82);
-  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.35);
+  background: rgba(20, 24, 30, 0.82);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.26);
   backdrop-filter: blur(10px);
+  color: #f7fbff;
 }
 
 .panel h1 {
   margin: 0;
-  color: #ffffff;
   font-size: 21px;
-  font-weight: 700;
+  font-weight: 760;
   line-height: 1.15;
+  letter-spacing: 0;
 }
 
 .panel p {
   margin: 7px 0 14px;
-  color: #c8d8e8;
+  color: #d7e2ec;
   font-size: 14px;
   line-height: 1.35;
 }
@@ -61,38 +70,47 @@ body {
 button {
   min-height: 38px;
   flex: 1 1 130px;
-  border: 1px solid rgba(167, 218, 255, 0.34);
+  border: 1px solid rgba(178, 220, 255, 0.38);
   border-radius: 6px;
-  background: rgba(34, 56, 75, 0.9);
+  background: rgba(34, 56, 75, 0.95);
   color: #f6fbff;
   cursor: pointer;
   font: inherit;
   font-size: 14px;
-  font-weight: 650;
+  font-weight: 700;
 }
 
 button:hover,
 button:focus-visible {
-  border-color: rgba(191, 230, 255, 0.72);
-  background: rgba(48, 79, 104, 0.96);
+  border-color: rgba(211, 236, 255, 0.86);
+  background: rgba(49, 78, 101, 0.98);
   outline: none;
 }
 
-#status {
+#status,
+.hint {
   position: fixed;
-  left: 18px;
-  bottom: 18px;
   z-index: 2;
-  max-width: min(360px, calc(100vw - 36px));
+  max-width: min(390px, calc(100vw - 36px));
   padding: 9px 12px;
-  border: 1px solid rgba(190, 227, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 8px;
-  background: rgba(11, 18, 27, 0.78);
-  color: #eaf7ff;
+  background: rgba(20, 24, 30, 0.78);
+  color: #f7fbff;
   font-size: 13px;
   line-height: 1.3;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.24);
   backdrop-filter: blur(8px);
+}
+
+#status {
+  left: 18px;
+  bottom: 18px;
+}
+
+.hint {
+  right: 18px;
+  bottom: 18px;
 }
 
 #fatal-error {
@@ -102,10 +120,10 @@ button:focus-visible {
   display: grid;
   place-items: center;
   padding: 24px;
-  background: #101720;
+  background: #111827;
   color: #ffffff;
   font-size: clamp(18px, 3vw, 28px);
-  font-weight: 700;
+  font-weight: 760;
   text-align: center;
 }
 
@@ -113,18 +131,7 @@ button:focus-visible {
   display: none;
 }
 
-.maplibregl-ctrl-top-right {
-  top: 14px;
-  right: 14px;
-}
-
-.maplibregl-ctrl-group {
-  border-radius: 8px;
-  overflow: hidden;
-  background: rgba(250, 253, 255, 0.94);
-}
-
-@media (max-width: 560px) {
+@media (max-width: 720px) {
   .panel {
     top: 12px;
     left: 12px;
@@ -135,6 +142,10 @@ button:focus-visible {
   #status {
     left: 12px;
     bottom: 12px;
-    max-width: calc(100vw - 24px);
+  }
+
+  .hint {
+    right: 12px;
+    bottom: 58px;
   }
 }

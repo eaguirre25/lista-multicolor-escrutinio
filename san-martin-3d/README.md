@@ -1,6 +1,8 @@
 # General San Martín 3D
 
-Visualización web estática del Partido de General San Martín, Provincia de Buenos Aires, en una vista oblicua 3D con MapLibre GL JS y una base raster de OpenStreetMap.
+Visualización web estática del Partido de General San Martín, Provincia de Buenos Aires, en una escena 3D inspirada en `cartesiancs/map3d`.
+
+Esta versión usa Three.js desde CDN para proyectar coordenadas geográficas a un plano local y extruir polígonos como volúmenes urbanos. No usa React, build step, Mapbox, Cesium, claves de API ni servicios pagos.
 
 ## Cómo verla en GitHub Pages
 
@@ -8,13 +10,9 @@ La URL pública esperada es:
 
 https://eaguirre25.github.io/lista-multicolor-escrutinio/san-martin-3d/
 
-La página no requiere tokens, claves de API ni procesos de compilación.
-
 ## Cómo abrirla localmente
 
-Se puede abrir directamente desde `san-martin-3d/index.html`. Si el navegador bloquea la lectura de GeoJSON por usar `file://`, la aplicación usa datos embebidos y volúmenes generados en memoria para evitar una pantalla en blanco.
-
-Para probarla en condiciones similares a GitHub Pages, conviene servir el repositorio con un servidor estático:
+Se puede abrir directamente desde `san-martin-3d/index.html`. Para probarla en condiciones similares a GitHub Pages, conviene servir el repositorio con un servidor estático:
 
 ```bash
 python -m http.server 8000
@@ -26,11 +24,21 @@ http://localhost:8000/san-martin-3d/
 
 ## Archivos
 
-- `index.html`: estructura mínima de la página y carga de MapLibre desde CDN.
-- `styles.css`: estilos de pantalla completa, panel superior izquierdo, botones e indicador de estado.
-- `app.js`: inicialización del mapa, carga de capas, controles de vista y fallbacks.
+- `index.html`: estructura mínima de la página y carga de la aplicación como módulo JavaScript.
+- `styles.css`: estilos de pantalla completa, panel, botones, indicador de estado y fondo visual.
+- `app.js`: escena Three.js, cámara orbital, proyección local, geometrías extruidas, controles y fallbacks.
 - `data/san_martin_boundary.geojson`: límite provisorio aproximado del partido.
 - `data/buildings.geojson`: volúmenes urbanos simulados con propiedad `height`.
+
+## Base técnica
+
+La lógica imita la base de `map3d`:
+
+- proyecta latitud/longitud a coordenadas planas locales;
+- convierte polígonos GeoJSON en `THREE.Shape`;
+- usa `THREE.ExtrudeGeometry` para levantar volúmenes;
+- agrega luces, niebla, grilla, contorno y líneas tipo caminos;
+- permite orbitar con mouse y cambiar entre vista 3D y cenital.
 
 ## Datos provisorios
 
@@ -58,4 +66,4 @@ Si no hay altura real disponible, una opción razonable para una segunda etapa e
 
 ## Segunda versión
 
-Una próxima versión debería incorporar límite oficial validado, edificios reales de OSM o catastro municipal, cálculo robusto de alturas, recorte exacto de edificios al límite del partido y controles para activar/desactivar capas analíticas futuras.
+Una próxima versión debería incorporar límite oficial validado, edificios reales de OSM o catastro municipal, caminos reales exportados previamente, cálculo robusto de alturas, recorte exacto de edificios al límite del partido y opción de exportar GLB como en el proyecto de referencia.
