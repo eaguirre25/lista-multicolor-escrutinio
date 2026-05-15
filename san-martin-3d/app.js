@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-const CENTER = [-58.557, -34.562];
+const CENTER = [-58.5640721, -34.5434998];
 const SCALE = 51000;
 const BUILDING_SCALE = 0.72;
 
@@ -17,17 +17,17 @@ const FALLBACK_BOUNDARY = {
       geometry: {
         type: "Polygon",
         coordinates: [[
-          [-58.5965, -34.5412],
-          [-58.5742, -34.5358],
-          [-58.5488, -34.5404],
-          [-58.5238, -34.5544],
-          [-58.5164, -34.5786],
-          [-58.5268, -34.6037],
-          [-58.5525, -34.6122],
-          [-58.5798, -34.6049],
-          [-58.5992, -34.5834],
-          [-58.6035, -34.5578],
-          [-58.5965, -34.5412]
+          [-58.6182, -34.5474],
+          [-58.5998, -34.4894],
+          [-58.5685, -34.5175],
+          [-58.5407, -34.5422],
+          [-58.5291, -34.5424],
+          [-58.5247, -34.5501],
+          [-58.5099, -34.5693],
+          [-58.5226, -34.5976],
+          [-58.5622, -34.5913],
+          [-58.5903, -34.5690],
+          [-58.6182, -34.5474]
         ]]
       }
     }
@@ -370,10 +370,10 @@ async function init() {
 
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0xd8e6f5);
-  scene.fog = new THREE.Fog(0xd8e6f5, 1800, 6200);
+  scene.fog = new THREE.Fog(0xd8e6f5, 5200, 14000);
 
   const camera = new THREE.PerspectiveCamera(58, 1, 0.1, 9000);
-  camera.position.set(980, 820, 1100);
+  camera.position.set(2600, 2400, 3200);
 
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -386,8 +386,8 @@ async function init() {
   controls.dampingFactor = 0.08;
   controls.target.set(0, 25, 0);
   controls.maxPolarAngle = Math.PI * 0.48;
-  controls.minDistance = 320;
-  controls.maxDistance = 3600;
+  controls.minDistance = 450;
+  controls.maxDistance = 9200;
   controls.update();
 
   resizeRenderer(renderer, camera);
@@ -428,11 +428,11 @@ async function init() {
   const volumeCount = addBuildings(scene, buildingsData);
 
   document.getElementById("view-3d").addEventListener("click", () => {
-    easeCamera(camera, controls, [980, 820, 1100], [0, 25, 0]);
+    easeCamera(camera, controls, [2600, 2400, 3200], [0, 25, 0]);
   });
 
   document.getElementById("view-top").addEventListener("click", () => {
-    easeCamera(camera, controls, [0, 2200, 0.01], [0, 0, 0]);
+    easeCamera(camera, controls, [0, 8200, 0.01], [0, 0, 0]);
   });
 
   function render() {

@@ -27,7 +27,7 @@ http://localhost:8000/san-martin-3d/
 - `index.html`: estructura mínima de la página y carga de la aplicación como módulo JavaScript.
 - `styles.css`: estilos de pantalla completa, panel, botones, indicador de estado y fondo visual.
 - `app.js`: escena Three.js, cámara orbital, proyección local, geometrías extruidas, controles y fallbacks.
-- `data/san_martin_boundary.geojson`: límite provisorio aproximado del partido.
+- `data/san_martin_boundary.geojson`: límite del Partido de General San Martín obtenido de OpenStreetMap/Nominatim.
 - `data/buildings.geojson`: volúmenes urbanos simulados con propiedad `height`.
 
 ## Base técnica
@@ -40,11 +40,11 @@ La lógica imita la base de `map3d`:
 - agrega luces, niebla, grilla, contorno y líneas tipo caminos;
 - permite orbitar con mouse y cambiar entre vista 3D y cenital.
 
-## Datos provisorios
+## Datos
 
-El límite territorial incluido es aproximado y no debe usarse como dato oficial. Sirve solo para esta primera prueba visual.
+El límite territorial incluido corresponde a la relación OSM `1719022`, `Partido de General San Martín, Buenos Aires, Argentina`, descargada como GeoJSON estático desde Nominatim. Debe validarse contra una fuente oficial antes de usarlo en análisis institucionales.
 
-Los volúmenes urbanos son simulados. No representan catastro real, alturas reales, huellas edilicias oficiales ni edificios de OpenStreetMap. Fueron distribuidos dentro del polígono aproximado para comprobar la vista 3D.
+Los volúmenes urbanos son simulados. No representan catastro real, alturas reales, huellas edilicias oficiales ni edificios de OpenStreetMap. Fueron distribuidos dentro del polígono del partido para comprobar la vista 3D.
 
 ## Reemplazar el límite por un GeoJSON oficial
 
