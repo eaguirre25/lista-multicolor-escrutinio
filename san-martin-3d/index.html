@@ -1,48 +1,30 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>General San Martín 3D</title>
-  <link rel="stylesheet" href="./styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>General San Martín 3D (Google Earth)</title>
+    <!-- CesiumJS CSS -->
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.116/Build/Cesium/Widgets/widgets.css" rel="stylesheet" />
+    <link href="styles.css" rel="stylesheet" />
 </head>
 <body>
-  <div id="map" aria-label="Escena 3D de General San Martín"></div>
-
-  <section class="panel" aria-label="Controles de la escena">
-    <h1>General San Martín 3D</h1>
-    <p>Vista simple del partido en perspectiva 3D.</p>
-    <div class="actions">
-      <button id="view-3d" type="button">Vista 3D</button>
-      <button id="view-top" type="button">Vista cenital</button>
+    <div id="cesiumContainer"></div>
+    
+    <div id="ui-panel">
+        <h1>General San Martín 3D</h1>
+        <p>Modelo fotorrealista de Google Earth.</p>
+        
+        <div class="controls">
+            <button id="btn-3d" class="btn">Vista 3D</button>
+            <button id="btn-zenith" class="btn">Vista cenital</button>
+        </div>
+        
+        <div id="status">Cargando Cesium...</div>
     </div>
-  </section>
 
-  <div class="hint">Arrastrar para orbitar · rueda para acercar</div>
-  <div id="status" role="status" aria-live="polite">Cargando mapa...</div>
-  <div id="fatal-error" role="alert" hidden>No se pudo cargar el motor del mapa.</div>
-
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "https://unpkg.com/three@0.173.0/build/three.module.js",
-        "three/addons/": "https://unpkg.com/three@0.173.0/examples/jsm/"
-      }
-    }
-  </script>
-  <script>
-    window.setTimeout(function () {
-      if (!window.sanMartin3DReady) {
-        var status = document.getElementById("status");
-        var fatal = document.getElementById("fatal-error");
-        if (status) status.textContent = "Mapa cargado con advertencias";
-        if (fatal) {
-          fatal.textContent = "No se pudo cargar el motor del mapa.";
-          fatal.hidden = false;
-        }
-      }
-    }, 7000);
-  </script>
-  <script type="module" src="./app.js"></script>
+    <!-- CesiumJS -->
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.116/Build/Cesium/Cesium.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
