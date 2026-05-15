@@ -234,6 +234,109 @@ function makeLine(coordinates, material, y = 0.35) {
   return new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), material);
 }
 
+function lonToTileX(lng, zoom) {
+  return Math.floor(((lng + 180) / 360) * 2 ** zoom);
+}
+
+function latToTileY(lat, zoom) {
+  const latRad = (lat * Math.PI) / 180;
+  return Math.floor(
+    ((1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2) * 2 ** zoom
+  );
+}
+
+function tileXToLon(x, zoom) {
+  return (x / 2 ** zoom) * 360 - 180;
+}
+
+function tileYToLat(y, zoom) {
+  const n = Math.PI - (2 * Math.PI * y) / 2 ** zoom;
+  return (180 / Math.PI) * Math.atan(0.5 * (Math.exp(n) - Math.exp(-n)));
+}
+
+function loadImage(url) {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.crossOrigin = "anonymous";
+    image.onload = () => resolve(image);
+    image.onerror = reject;
+    image.src = url;
+  });
+}
+
+async function addStreetBase(scene, boundaryData, renderer) {
+  const zoom = 14;
+  const tileSize = 256;
+  const bounds = polygonBounds(firstPolygon(boundaryData));
+  const xMin = lonToTileX(bounds.minLng, zoom);
+  const xMax = lonToTileX(bounds.maxLng, zoom);
+  const yMin = latToTileY(bounds.maxLat, zoom);
+  const yMax = latToTileY(bounds.minLat, zoom);
+  const cols = xMax - xMin + 1;
+  const rows = yMax - yMin + 1;
+
+  if (cols <= 0 || rows <= 0 || cols * rows > 80) {
+    return false;
+  }
+
+  const canvas = document.createElement("canvas");
+  canvas.width = cols * tileSize;
+  canvas.height = rows * tileSize;
+  const context = canvas.getContext("2d");
+  context.fillStyle = "#eef2f3";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+
+  let loadedTiles = 0;
+  const jobs = [];
+  for (let x = xMin; x <= xMax; x += 1) {
+    for (let y = yMin; y <= yMax; y += 1) {
+      const url = `https://tile.openstreetmap.org/${zoom}/${x}/${y}.png`;
+      jobs.push(
+        loadImage(url)
+          .then((image) => {
+            context.drawImage(image, (x - xMin) * tileSize, (y - yMin) * tileSize, tileSize, tileSize);
+            loadedTiles += 1;
+          })
+          .catch((error) => {
+            console.warn("No se pudo cargar una tesela OSM.", url, error);
+          })
+      );
+    }
+  }
+
+  await Promise.all(jobs);
+  if (loadedTiles === 0) {
+    return false;
+  }
+
+  const west = tileXToLon(xMin, zoom);
+  const east = tileXToLon(xMax + 1, zoom);
+  const north = tileYToLat(yMin, zoom);
+  const south = tileYToLat(yMax + 1, zoom);
+  const southWest = projectCoordinate([west, south]);
+  const northEast = projectCoordinate([east, north]);
+  const width = Math.abs(northEast.x - southWest.x);
+  const depth = Math.abs(northEast.y - southWest.y);
+  const centerX = (northEast.x + southWest.x) / 2;
+  const centerZ = (northEast.y + southWest.y) / 2;
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+
+  const material = new THREE.MeshBasicMaterial({
+    map: texture,
+    transparent: true,
+    opacity: 0.9
+  });
+  const plane = new THREE.Mesh(new THREE.PlaneGeometry(width, depth), material);
+  plane.rotation.x = -Math.PI / 2;
+  plane.position.set(centerX, -0.08, centerZ);
+  scene.add(plane);
+
+  return true;
+}
+
 function addGround(scene, boundaryData) {
   const shape = makeShapeFromCoordinates(firstPolygon(boundaryData));
   const geometry = new THREE.ShapeGeometry(shape);
@@ -244,7 +347,7 @@ function addGround(scene, boundaryData) {
     new THREE.MeshStandardMaterial({
       color: 0xc7e8ef,
       transparent: true,
-      opacity: 0.38,
+      opacity: 0.18,
       roughness: 0.82,
       metalness: 0.02,
       side: THREE.DoubleSide
@@ -326,6 +429,11 @@ function addReferenceGrid(scene, boundaryData) {
   const width = Math.abs(eastNorth.x - westSouth.x);
   const depth = Math.abs(eastNorth.y - westSouth.y);
   const grid = new THREE.GridHelper(Math.max(width, depth) * 1.15, 28, 0xaeb8c2, 0xd1d7dd);
+  const materials = Array.isArray(grid.material) ? grid.material : [grid.material];
+  materials.forEach((material) => {
+    material.transparent = true;
+    material.opacity = 0.28;
+  });
   grid.position.y = -0.03;
   scene.add(grid);
 }
@@ -422,9 +530,13 @@ async function init() {
   const simulatedVolumes = buildingResult.fallback ||
     buildingsData.features.some((feature) => feature.properties && feature.properties.simulated);
 
+  const streetsLoaded = await addStreetBase(scene, boundaryResult.data, renderer);
   addReferenceGrid(scene, boundaryResult.data);
   addGround(scene, boundaryResult.data);
-  addRoads(scene, boundaryResult.data);
+  if (!streetsLoaded) {
+    console.warn("No se pudo cargar la capa de calles OSM. Se usan líneas sintéticas como respaldo visual.");
+    addRoads(scene, boundaryResult.data);
+  }
   const volumeCount = addBuildings(scene, buildingsData);
 
   document.getElementById("view-3d").addEventListener("click", () => {

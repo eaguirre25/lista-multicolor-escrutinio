@@ -26,7 +26,7 @@ http://localhost:8000/san-martin-3d/
 
 - `index.html`: estructura mínima de la página y carga de la aplicación como módulo JavaScript.
 - `styles.css`: estilos de pantalla completa, panel, botones, indicador de estado y fondo visual.
-- `app.js`: escena Three.js, cámara orbital, proyección local, geometrías extruidas, controles y fallbacks.
+- `app.js`: escena Three.js, cámara orbital, proyección local, textura de calles OSM, geometrías extruidas, controles y fallbacks.
 - `data/san_martin_boundary.geojson`: límite del Partido de General San Martín obtenido de OpenStreetMap/Nominatim.
 - `data/buildings.geojson`: volúmenes urbanos simulados con propiedad `height`.
 
@@ -35,6 +35,7 @@ http://localhost:8000/san-martin-3d/
 La lógica imita la base de `map3d`:
 
 - proyecta latitud/longitud a coordenadas planas locales;
+- arma una textura de fondo con teselas raster de OpenStreetMap;
 - convierte polígonos GeoJSON en `THREE.Shape`;
 - usa `THREE.ExtrudeGeometry` para levantar volúmenes;
 - agrega luces, niebla, grilla, contorno y líneas tipo caminos;
